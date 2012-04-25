@@ -1,3 +1,5 @@
 aeircd
 
 aeircd aimes to be simple irc server implementation.
+
+The server will be configurable, and scriptable using Lua.
