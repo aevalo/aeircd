@@ -1,0 +1,55 @@
+project(aeircd CXX)
+cmake_minimum_required(VERSION 2.8)
+
+set(CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/cmake/Modules
+)
+
+set(AEIRCD_SOURCES src/main.cpp src/aeircd.hpp src/aeircd.cpp src/SysDep.hpp src/Logger.hpp src/Logger.cpp)
+if(WIN32 AND NOT UNIX)
+  set(AEIRCD_SOURCES ${AEIRCD_SOURCES} src/SysDep_win32.cpp)
+elseif(UNIX AND NOT WIN32)
+  set(AEIRCD_SOURCES ${AEIRCD_SOURCES} src/SysDep_unix.cpp)
+endif(WIN32 AND NOT UNIX)
+
+
+include(EnsureOutOfSourceBuild)
+
+EnsureOutOfSourceBuild("Out-of-source build required.")
+
+find_package( Boost 1.47.0 COMPONENTS system regex thread)
+find_package( OpenSSL )
+if(Boost_FOUND AND OPENSSL_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
+    link_directories(${Boost_LIBRARY_DIRS})
+    
+    if(WIN32)
+        add_definitions(-D_WIN32_WINNT=0x0501 -D_CRT_SECURE_NO_WARNINGS)
+    endif(WIN32)
+    
+    add_executable(aeircd ${AEIRCD_SOURCES})
+    target_link_libraries(aeircd ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
+    
+    add_executable(ssl_server src/ssl/server.cpp)
+    target_link_libraries(ssl_server ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
+    add_executable(ssl_client src/ssl/client.cpp)
+    target_link_libraries(ssl_client ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
+    
+    add_executable(chat_server src/chat/chat_server.cpp)
+    target_link_libraries(chat_server ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
+    if(WIN32)
+        add_executable(chat_client src/chat/chat_client.cpp)
+    elseif(UNIX)
+        add_executable(chat_client src/chat/posix_chat_client.cpp)
+    endif(WIN32)
+    target_link_libraries(chat_client ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
+    
+    install(TARGETS aeircd ssl_server ssl_client chat_server chat_client
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib/static)
+    if(WIN32 AND NOT UNIX)
+      install(CODE "file(MAKE_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/logs/\")")
+      install(CODE "file(MAKE_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/config/\")")
+    endif(WIN32 AND NOT UNIX)
+endif(Boost_FOUND AND OPENSSL_FOUND)
