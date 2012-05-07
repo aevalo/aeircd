@@ -49,6 +49,14 @@ int main( int argc, const char* argv[] )
   AEIRCD_ENTER_FUNC;
   AEIRCD_LEAVE_FUNC;
   
+  aeircd::Message::Prefix p;
+  bool ret = aeircd::Message::ParsePrefix("!user@host", p);
+  if (ret)
+  {
+    std::cout << "Username: " << p.user << std::endl;
+    std::cout << "Hostname: " << p.host << std::endl;
+  }
+  
   aeircd::Uninitialize();
   
   return 0;

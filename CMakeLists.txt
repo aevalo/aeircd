@@ -5,7 +5,9 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake/Modules
 )
 
-set(AEIRCD_SOURCES src/main.cpp src/aeircd.hpp src/aeircd.cpp src/SysDep.hpp src/Logger.hpp src/Logger.cpp)
+set(AEIRCD_SOURCES src/main.cpp src/aeircd.cpp src/Logger.cpp src/Message.cpp)
+set(AEIRCD_HEADERS src/aeircd.hpp src/SysDep.hpp src/Logger.hpp src/Logger.hpp src/Message.hpp)
+
 if(WIN32 AND NOT UNIX)
   set(AEIRCD_SOURCES ${AEIRCD_SOURCES} src/SysDep_win32.cpp)
 elseif(UNIX AND NOT WIN32)
@@ -24,7 +26,7 @@ if(Boost_FOUND AND OPENSSL_FOUND)
     link_directories(${Boost_LIBRARY_DIRS})
     
     if(WIN32)
-        add_definitions(-D_WIN32_WINNT=0x0501 -D_CRT_SECURE_NO_WARNINGS)
+        add_definitions(-D_WIN32_WINNT=0x0501 -D_CRT_SECURE_NO_WARNINGS -D_ATL_SECURE_NO_WARNINGS -D_AFX_SECURE_NO_WARNINGS)
     endif(WIN32)
     
     add_executable(aeircd ${AEIRCD_SOURCES})
