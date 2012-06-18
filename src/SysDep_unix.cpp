@@ -1,6 +1,11 @@
+#include <cerrno>
 #include <pwd.h>
+#include <unistd.h>
+#include <cstdlib>
 #include <string.h>
 #include <string>
+#include "SysDep.hpp"
+
 
 namespace aeircd
 {
@@ -51,5 +56,3 @@ namespace aeircd
     }
   }
 }
-
-#endif // AEIRCD_SYSDEP_HPP_INCLUDED

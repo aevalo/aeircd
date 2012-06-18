@@ -26,7 +26,7 @@ namespace aeircd
         
       public: // Functions
         
-        Logger( const std::string& file, std::ios::open_mode mode = std::ios::out );
+        Logger( const std::string& file, std::ios_base::openmode = std::ios::out );
         ~Logger();
 
         inline LogLevel logLevel() const { return mLogLevel; }

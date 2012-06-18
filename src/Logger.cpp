@@ -16,7 +16,7 @@ namespace aeircd
     };
 
 
-    Logger::Logger( const std::string& file, std::ios::open_mode mode )
+    Logger::Logger( const std::string& file, std::ios_base::openmode mode )
     : mLogLevel( Trace ), mLogFile( file.c_str(), mode )
     {
       if ( mLogFile.fail() )

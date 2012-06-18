@@ -30,7 +30,8 @@ namespace aeircd
     AEIRCD_LOG_DEBUG( m_file );
     int m_level = pt.get("debug.level", 0);
     char buf[10];
-    AEIRCD_LOG_DEBUG( itoa( m_level, buf, 10 ) );
+    sprintf(buf,"%d",m_level);
+    AEIRCD_LOG_DEBUG( buf );
     std::vector<std::string> m_modules;
     BOOST_FOREACH(ptree::value_type &v,
             pt.get_child("debug.modules"))

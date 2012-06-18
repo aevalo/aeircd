@@ -1,16 +1,13 @@
 #ifndef AEIRCD_HPP_INCLUDED
 #define AEIRCD_HPP_INCLUDED
 
+#include <boost/current_function.hpp>
 #include "SysDep.hpp"
 #include "Logger.hpp"
 #include "Message.hpp"
 
-#ifndef __PRETTY_FUNCTION__
-#define __PRETTY_FUNCTION__ __FUNCSIG__
-#endif
-
-#define AEIRCD_ENTER_FUNC       {if(aeircd::pLogger){aeircd::pLogger->debug( ">>> " __PRETTY_FUNCTION__ ); }}
-#define AEIRCD_LEAVE_FUNC       {if(aeircd::pLogger){aeircd::pLogger->debug( "<<< " __PRETTY_FUNCTION__ ); }}
+#define AEIRCD_ENTER_FUNC       {if(aeircd::pLogger){aeircd::pLogger->debug( std::string(">>> ") + std::string(BOOST_CURRENT_FUNCTION) ); }}
+#define AEIRCD_LEAVE_FUNC       {if(aeircd::pLogger){aeircd::pLogger->debug( std::string("<<< ") + std::string(BOOST_CURRENT_FUNCTION) ); }}
 
 #define AEIRCD_LOG_TRACE(msg)     {if(aeircd::pLogger){aeircd::pLogger->trace( msg );}}
 #define AEIRCD_LOG_DEBUG(msg)     {if(aeircd::pLogger){aeircd::pLogger->debug( msg );}}

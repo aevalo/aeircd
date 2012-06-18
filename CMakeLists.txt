@@ -19,7 +19,7 @@ include(EnsureOutOfSourceBuild)
 
 EnsureOutOfSourceBuild("Out-of-source build required.")
 
-find_package( Boost 1.47.0 COMPONENTS system regex thread)
+find_package( Boost 1.47.0 COMPONENTS system regex thread )
 find_package( OpenSSL )
 if(Boost_FOUND AND OPENSSL_FOUND)
     include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
@@ -29,24 +29,10 @@ if(Boost_FOUND AND OPENSSL_FOUND)
         add_definitions(-D_WIN32_WINNT=0x0501 -D_CRT_SECURE_NO_WARNINGS -D_ATL_SECURE_NO_WARNINGS -D_AFX_SECURE_NO_WARNINGS)
     endif(WIN32)
     
-    add_executable(aeircd ${AEIRCD_SOURCES})
+    add_executable(aeircd ${AEIRCD_HEADERS} ${AEIRCD_SOURCES})
     target_link_libraries(aeircd ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
     
-    add_executable(ssl_server src/ssl/server.cpp)
-    target_link_libraries(ssl_server ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
-    add_executable(ssl_client src/ssl/client.cpp)
-    target_link_libraries(ssl_client ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
-    
-    add_executable(chat_server src/chat/chat_server.cpp)
-    target_link_libraries(chat_server ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
-    if(WIN32)
-        add_executable(chat_client src/chat/chat_client.cpp)
-    elseif(UNIX)
-        add_executable(chat_client src/chat/posix_chat_client.cpp)
-    endif(WIN32)
-    target_link_libraries(chat_client ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
-    
-    install(TARGETS aeircd ssl_server ssl_client chat_server chat_client
+    install(TARGETS aeircd
             RUNTIME DESTINATION bin
             LIBRARY DESTINATION lib
             ARCHIVE DESTINATION lib/static)
